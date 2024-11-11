@@ -1,6 +1,5 @@
-from solver.problem_solver import load_problems_csv, read_and_preprocess_csv
+from solver.problem_solver import load_problems_csv, read_and_preprocess_csv, solve_cost_stop
 from solver.graph_builder import build_graph
-
 
 def main():
 
@@ -15,8 +14,9 @@ def main():
 
     # build Graph from data
     graph = build_graph(schedule_df)
-    print(graph)
-
+    print(solve_cost_stop(graph, 'TK', 'SGD', schedule_df))
+        
+    
 
 if __name__ == "__main__":
     main()
