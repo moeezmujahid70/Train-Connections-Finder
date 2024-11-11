@@ -5,19 +5,29 @@ import pandas as pd
 def main():
     
     problems_file = "problems/example-problems.csv"
-    schedule_file = "data/mini-schedule.csv"  # File containing schedule data
+    mini_schedule_file = "data/mini-schedule.csv"  
+    schedule_file = "data/schedule.csv"         # File containing schedule data
 
     # Load and preprocess the problem
     problems_df = load_problems_csv(problems_file)
+    mini_schedule_df = read_and_preprocess_csv(mini_schedule_file)
     schedule_df = read_and_preprocess_csv(schedule_file)
+    print(mini_schedule_df.head())
     print(schedule_df.head())
     print(problems_df.head())
     # build Graph from data
     graph = build_graph(schedule_df)
-    rslt_df = problems_df.loc[(problems_df['CostFunction'] == 'stops') & (problems_df['Schedule'] == 'mini-schedule.csv')]
+    mini_graph = build_graph(mini_schedule_df)
+    rslt_df = problems_df.loc[(problems_df['CostFunction'] == 'stops')]# & (problems_df['Schedule'] == 'mini-schedule.csv')]
     solutions = {'ProblemNo':[],'Connection':[],'Cost':[]}
     for _, row in rslt_df.iterrows():
-        connection, cost = solve_cost_stop(graph, row['FromStation'], row['ToStation'], schedule_df)
+        if row['Schedule'] == 'mini-schedule.csv':
+            df = mini_schedule_df
+            G = mini_graph
+        else:
+            df = schedule_df
+            G = graph
+        connection, cost = solve_cost_stop(G, row['FromStation'], row['ToStation'], df)
         solutions['ProblemNo'].append(row['ProblemNo'])
         solutions['Connection'].append(connection)
         solutions['Cost'].append(cost)
