@@ -18,6 +18,6 @@ def build_graph(schedule_df: pd.DataFrame) -> nx.DiGraph:
             to_station = group.iloc[i + 1]['station Code']
 
             # Add a directed edge from from_station to to_station
-            G.add_edge(from_station, to_station, train=train_no)
+            G.add_edge(from_station, to_station, train=train_no, weight = 1)
 
     return G
