@@ -1,4 +1,5 @@
-from solver.problem_solver import load_problems_csv, read_and_preprocess_csv, solve_cost_stop, solve_cost_timeintrain, create_solutions_csv
+from solver.problem_solver import load_problems_csv, read_and_preprocess_csv, create_solutions_csv
+from solver.costFuntions import solve_cost_funtion
 from solver.graph_builder import build_graph
 
 
@@ -30,8 +31,8 @@ def main():
         else:
             df = schedule_df
             G = graph
-        connection, cost = solve_cost_stop(
-            G, row['FromStation'], row['ToStation'], df)
+        connection, cost = solve_cost_funtion(
+            G, row['FromStation'], row['ToStation'], df, 'stops')
         solutions['ProblemNo'].append(row['ProblemNo'])
         solutions['Connection'].append(connection)
         solutions['Cost'].append(cost)
@@ -43,8 +44,8 @@ def main():
         else:
             df = schedule_df
             G = graph
-        connection, cost = solve_cost_timeintrain(
-            G, row['FromStation'], row['ToStation'], df)
+        connection, cost = solve_cost_funtion(
+            G, row['FromStation'], row['ToStation'], df, 'timeintrain')
         solutions['ProblemNo'].append(row['ProblemNo'])
         solutions['Connection'].append(connection)
         solutions['Cost'].append(cost)
