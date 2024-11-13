@@ -1,0 +1,79 @@
+import heapq
+from solver.problem_solver import construct_connection
+
+
+def solve_cost_funtion(graph, start, target, schedule_df, cost_attribute='stops'):
+    """
+    Solves for the optimal path based on the specified cost attribute and formats the solution.
+    """
+    station_sequence, train_sequence, total_cost = dijkstra_path(
+        graph, start, target, cost_attribute)
+
+    if station_sequence is None:
+        return 'PATH NOT FOUND'
+
+    connection = construct_connection(
+        schedule_df, station_sequence, train_sequence)
+    return connection, str(total_cost)
+
+
+def dijkstra_path(graph, start, target, cost_attribute):
+    """
+    Dijkstra's algorithm to find the shortest path in a MultiDiGraph.
+
+    Parameters:
+        graph (nx.MultiDiGraph): The graph to search.
+        start (str): The starting node.
+        target (str): The target node.
+        cost_attribute (str): The edge attribute to use as the cost ('stops' or 'timeintrain').
+
+    Returns:
+        tuple: (station_sequence, train_sequence, total_cost)
+    """
+    # Initialize costs to infinity and set the start node cost to 0
+    costs = {node: float('infinity') for node in graph}
+    costs[start] = 0
+
+    # Dictionary to store the predecessor of each node to reconstruct the path
+    predecessors = {node: {'previous_station': None, 'train': None}
+                    for node in graph}
+
+    # Priority queue to keep track of nodes to visit
+    priority_queue = [(0, start)]  # (current_cost, current_node)
+
+    while priority_queue:
+        # Get the node with the smallest cost
+        current_cost, current_node = heapq.heappop(priority_queue)
+
+        # If we reach the target node, stop and reconstruct the path
+        if current_node == target:
+            # Reconstruct the optimal path
+            station_sequence = []
+            train_sequence = []
+            while current_node is not None:
+                station_sequence.append(current_node)
+                if predecessors[current_node]['train'] is not None:
+                    train_sequence.append(predecessors[current_node]['train'])
+                current_node = predecessors[current_node]['previous_station']
+            return station_sequence[::-1], train_sequence[::-1], costs[target]
+
+        # Skip if cost is already outdated
+        if current_cost > costs[current_node]:
+            continue
+
+        # Check all edges to neighbors of the current node
+        for neighbor, edges in graph[current_node].items():
+            for _, attribute in edges.items():  # Handle multiple edges between nodes
+                travel_cost = current_cost + attribute[cost_attribute]
+
+                # Only update if this path is shorter
+                if travel_cost < costs[neighbor]:
+                    costs[neighbor] = travel_cost
+                    predecessors[neighbor] = {
+                        'previous_station': current_node,
+                        'train': attribute['train']
+                    }
+                    heapq.heappush(priority_queue, (travel_cost, neighbor))
+
+    # Return if target is unreachable
+    return None, None, None

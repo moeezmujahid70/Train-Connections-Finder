@@ -20,11 +20,11 @@ def calculate_travel_time(from_station, to_station) -> timedelta:
     return (arrival_time - departure_time)
 
 
-def build_graph(schedule_df: pd.DataFrame) -> nx.DiGraph:
+def build_graph(schedule_df: pd.DataFrame) -> nx.MultiDiGraph:
     """
-    Builds a directed graph from the schedule data using NetworkX, adding timeintrain.
+    Builds a directed multigraph from the schedule data using NetworkX, allowing multiple edges between nodes.
     """
-    G = nx.DiGraph()  # Directed graph
+    G = nx.MultiDiGraph()  # MultiDiGraph allows multiple edges between nodes
 
     # Group by train number to handle consecutive stops for each train
     for train_no, group in schedule_df.groupby('Train No.'):
@@ -37,15 +37,15 @@ def build_graph(schedule_df: pd.DataFrame) -> nx.DiGraph:
 
             # Calculate travel time in seconds
             travel_time_seconds = calculate_travel_time(
-                group.iloc[i],  group.iloc[i + 1]).seconds
+                group.iloc[i], group.iloc[i + 1]).seconds
 
-            # Add a directed edge from from_station to to_station with default weight and timeintrain
+            # Add a directed edge with train-specific attributes
             G.add_edge(
                 from_station,
                 to_station,
-                train=train_no,
-                weight=1,  # Default weight (costFuntion:Stops)
-                timeintrain=travel_time_seconds  # Add time spent in the train
+                train=train_no,  # Each edge has a specific train number
+                stops=1,  # Default weight (for Stops cost function)
+                timeintrain=travel_time_seconds  # Travel time in seconds
             )
 
     return G
