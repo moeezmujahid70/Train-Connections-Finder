@@ -45,20 +45,8 @@ def dijkstra_path(graph, start, target, cost_attribute):
         # Get the node with the smallest cost
         current_cost, current_node = heapq.heappop(priority_queue)
 
-        # If we reach the target node, stop and reconstruct the path
-        if current_node == target:
-            # Reconstruct the optimal path
-            station_sequence = []
-            train_sequence = []
-            while current_node is not None:
-                station_sequence.append(current_node)
-                if predecessors[current_node]['train'] is not None:
-                    train_sequence.append(predecessors[current_node]['train'])
-                current_node = predecessors[current_node]['previous_station']
-            return station_sequence[::-1], train_sequence[::-1], costs[target]
-
         # Skip if cost is already outdated
-        if current_cost > costs[current_node]:
+        if current_cost > costs[current_node] or current_node == target:
             continue
 
         # Check all edges to neighbors of the current node
@@ -74,6 +62,19 @@ def dijkstra_path(graph, start, target, cost_attribute):
                         'train': attribute['train']
                     }
                     heapq.heappush(priority_queue, (travel_cost, neighbor))
+
+    # If we reach the target node, reconstruct the path
+    if predecessors[target]['train'] is not None:
+        # Reconstruct the optimal path
+        current_node = target
+        station_sequence = []
+        train_sequence = []
+        while current_node is not None:
+            station_sequence.append(current_node)
+            if predecessors[current_node]['train'] is not None:
+                train_sequence.append(predecessors[current_node]['train'])
+            current_node = predecessors[current_node]['previous_station']
+        return station_sequence[::-1], train_sequence[::-1], costs[target]
 
     # Return if target is unreachable
     return None, None, None
