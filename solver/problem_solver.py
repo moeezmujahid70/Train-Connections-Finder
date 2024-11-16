@@ -50,6 +50,18 @@ def read_and_preprocess_csv(schedule_file_path: str) -> pd.DataFrame:
 
     return schedule_df
 
+def decode_expanded_path(path:list) -> tuple:
+    station_sequence=[]
+    train_sequence=[]
+    path = path[1:-1]
+    station_sequence.append(path[0][0])
+    train_sequence.append(path[0][1])
+    for i in range(1,len(path)-1,2):
+        station_sequence.append(path[i][0])
+        train_sequence.append(path[i+1][1])
+    station_sequence.append(path[-1][0])
+    return station_sequence, train_sequence
+
 
 def construct_connection(schedule_df, station_sequence, train_sequence):
     """
@@ -92,6 +104,7 @@ def create_solutions_csv(solutions: dict, filepath: str):
     """
     try:
         solutions_df = pd.DataFrame(solutions)
+        solutions_df.sort_values(by=['ProblemNo'], inplace=True)
         solutions_df.to_csv(filepath, index=False)
     except IOError as e:
         print(f"Error writing to file {filepath}: {e}")
