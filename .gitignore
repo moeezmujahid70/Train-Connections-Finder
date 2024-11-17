@@ -33,3 +33,4 @@ solutions/my-example-solutions.csv
 *.gexf
 test*.py
 *.gexf.gephi
+tmp/

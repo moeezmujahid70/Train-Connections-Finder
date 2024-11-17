@@ -1,7 +1,7 @@
 from solver.problem_solver import load_problems_csv, read_and_preprocess_csv, create_solutions_csv
 from solver.costFuntions import solve_cost_funtion
 from solver.graph_builder import build_graph, expand_graph
-
+import pickle
 
 def main():
 
@@ -19,6 +19,7 @@ def main():
     mini_graph = build_graph(mini_schedule_df)
     expanded_mini_graph = expand_graph(mini_graph)
     expanded_graph = expand_graph(graph)
+    
    # Display some edges with the new timeintrain attribute
 
     rslt_df = problems_df.loc[(problems_df['CostFunction'] == 'stops')]
