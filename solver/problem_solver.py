@@ -1,6 +1,6 @@
 import pandas as pd
 from itertools import groupby
-from collections import defaultdict
+
 
 def load_problems_csv(problems_file_path: str) -> pd.DataFrame:
     """
@@ -12,7 +12,7 @@ def load_problems_csv(problems_file_path: str) -> pd.DataFrame:
 
         # Split 'CostFunction' into two columns if applicable
         if 'CostFunction' in problems_df.columns:
-            problems_df[['CostFunction', 'time']] = problems_df['CostFunction'].str.split(
+            problems_df[['CostFunction', 'input_time']] = problems_df['CostFunction'].str.split(
                 ' ', expand=True, n=1)
 
         return problems_df
@@ -51,7 +51,8 @@ def read_and_preprocess_csv(schedule_file_path: str) -> pd.DataFrame:
 
     return schedule_df
 
-def construct_connection_expanded_graph(path:list) -> str:
+
+def construct_connection_expanded_graph(path: list) -> str:
     # Given data as a list of tuples
     path = path[1:]
     connections = []
@@ -64,7 +65,8 @@ def construct_connection_expanded_graph(path:list) -> str:
         if train_no == current_train:
             train_segment.append((train_no, islno))
         else:
-            connections.append(f"{train_segment[0][0]} : {train_segment[0][1]} -> {train_segment[-1][1]}")
+            connections.append(
+                f"{train_segment[0][0]} : {train_segment[0][1]} -> {train_segment[-1][1]}")
             train_segment = [(train_no, islno)]
             current_train = train_no
 

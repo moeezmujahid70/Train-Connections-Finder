@@ -1,5 +1,5 @@
 from collections import defaultdict
-from solver.utils import calculate_time_differenc
+from solver.utils import calculate_time_difference
 import pandas as pd
 import networkx as nx
 
@@ -23,7 +23,7 @@ def build_graph(schedule_df: pd.DataFrame) -> nx.MultiDiGraph:
             from_islno = group.iloc[i]['islno']
             to_islno = group.iloc[i+1]['islno']
             # Calculate travel time in seconds
-            travel_time_seconds = calculate_time_differenc(
+            travel_time_seconds = calculate_time_difference(
                 group.iloc[i]['Departure time'], group.iloc[i + 1]['Arrival time']).seconds
 
             # Add a directed edge with train-specific attributes
@@ -44,7 +44,7 @@ def build_graph(schedule_df: pd.DataFrame) -> nx.MultiDiGraph:
 
 def expand_graph(graph: nx.MultiDiGraph) -> nx.DiGraph:
     """
-    Expands a MultiDiGraph to capture detailed arrival and departure times at stations.
+    Expands a MultiDiGraph to a DiGraph capture detailed arrival and departure times at stations.
     """
     expanded_graph = nx.DiGraph()
     arr_node_dict = defaultdict(dict)
@@ -93,8 +93,30 @@ def expand_graph(graph: nx.MultiDiGraph) -> nx.DiGraph:
         # Connect all arrival nodes to departure nodes within the same station
         for arr_node, arr_time in arr_nodes.items():
             for dep_node, dep_time in dep_nodes.items():
-                time_spent = calculate_time_differenc(
+                time_spent = calculate_time_difference(
                     arr_time, dep_time).seconds
                 expanded_graph.add_edge(arr_node, dep_node, time=time_spent)
 
     return expanded_graph
+
+
+def adjust_start_times(graph: nx.DiGraph, start_station: str, input_time: str) -> nx.DiGraph:
+    """
+    Adjusts the edge weights from the virtual start node of a specific station based on the provided input time.
+    """
+    adjusted_graph = graph.copy()
+    virtual_start_node = (start_station, '0', -1, 'start')
+
+    if virtual_start_node in graph:
+        # Iterate over edges from the virtual start node
+        for neighbor in list(graph.neighbors(virtual_start_node)):
+            dep_time = graph[virtual_start_node][neighbor]['departuretime']
+            wait_time = calculate_time_difference(input_time, dep_time).seconds
+
+            # Update the time attribute for the edge
+            adjusted_graph[virtual_start_node][neighbor]['time'] = wait_time
+    else:
+        raise ValueError(
+            f"No virtual start node found for station {start_station}")
+
+    return adjusted_graph
