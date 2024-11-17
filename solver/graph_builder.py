@@ -98,3 +98,25 @@ def expand_graph(graph: nx.MultiDiGraph) -> nx.DiGraph:
                 expanded_graph.add_edge(arr_node, dep_node, time=time_spent)
 
     return expanded_graph
+
+
+def adjust_start_times(graph: nx.DiGraph, start_station: str, input_time: str) -> nx.DiGraph:
+    """
+    Adjusts the edge weights from the virtual start node of a specific station based on the provided input time.
+    """
+    adjusted_graph = graph.copy()
+    virtual_start_node = (start_station, '0', -1, 'start')
+
+    if virtual_start_node in graph:
+        # Iterate over edges from the virtual start node
+        for neighbor in list(graph.neighbors(virtual_start_node)):
+            dep_time = graph[virtual_start_node][neighbor]['departuretime']
+            wait_time = calculate_time_differenc(input_time, dep_time).seconds
+
+            # Update the time attribute for the edge
+            adjusted_graph[virtual_start_node][neighbor]['time'] = wait_time
+    else:
+        raise ValueError(
+            f"No virtual start node found for station {start_station}")
+
+    return adjusted_graph
