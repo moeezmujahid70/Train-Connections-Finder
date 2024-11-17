@@ -31,5 +31,6 @@ __pycache__
 #example solution directories
 solutions/my-example-solutions.csv
 *.gexf
-test.py
+test*.py
 *.gexf.gephi
+tmp/

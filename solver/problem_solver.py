@@ -1,6 +1,6 @@
 import pandas as pd
 from itertools import groupby
-
+from collections import defaultdict
 
 def load_problems_csv(problems_file_path: str) -> pd.DataFrame:
     """
@@ -38,6 +38,7 @@ def read_and_preprocess_csv(schedule_file_path: str) -> pd.DataFrame:
         'source Station Name',
         'Destination station Code',
         'Destination Station Name'
+        'Distance'
     ]
     schedule_df = df.drop(columns=columns_to_drop, errors='ignore')
 
@@ -49,6 +50,26 @@ def read_and_preprocess_csv(schedule_file_path: str) -> pd.DataFrame:
     schedule_df['station Code'] = schedule_df['station Code'].str.strip()
 
     return schedule_df
+
+def construct_connection_expanded_graph(path:list) -> str:
+    # Given data as a list of tuples
+    path = path[1:]
+    connections = []
+    # Group train sequences while tracking segments
+    train_segment = []
+    train_order = []  # To keep track of the order of train numbers
+    current_train = path[0][1]
+    # Process the data while preserving the original order
+    for station, train_no, islno, node_type in path:
+        if train_no == current_train:
+            train_segment.append((train_no, islno))
+        else:
+            connections.append(f"{train_segment[0][0]} : {train_segment[0][1]} -> {train_segment[-1][1]}")
+            train_segment = [(train_no, islno)]
+            current_train = train_no
+
+    # Print the connections in the desired format
+    return (" ; ".join(connections))
 
 
 def construct_connection(schedule_df, station_sequence, train_sequence):
@@ -92,6 +113,7 @@ def create_solutions_csv(solutions: dict, filepath: str):
     """
     try:
         solutions_df = pd.DataFrame(solutions)
+        solutions_df.sort_values(by=['ProblemNo'], inplace=True)
         solutions_df.to_csv(filepath, index=False)
     except IOError as e:
         print(f"Error writing to file {filepath}: {e}")
