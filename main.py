@@ -1,5 +1,5 @@
 from solver.problem_solver import load_problems_csv, read_and_preprocess_csv, create_solutions_csv
-from solver.costFuntions import solve_cost_funtion
+from solver.costFunctions import solve_cost_function
 from solver.graph_builder import build_graph, expand_graph, adjust_start_times
 
 
@@ -45,11 +45,11 @@ def main():
             if cost_function == 'arrivaltime':
                 G = adjust_start_times(
                     G, row['FromStation'], row['input_time'])
-                connection, cost = solve_cost_funtion(
+                connection, cost = solve_cost_function(
                     G, row['FromStation'], row['ToStation'], df, cost_function, row['input_time']
                 )
             else:
-                connection, cost = solve_cost_funtion(
+                connection, cost = solve_cost_function(
                     G, row['FromStation'], row['ToStation'], df, cost_function
                 )
 

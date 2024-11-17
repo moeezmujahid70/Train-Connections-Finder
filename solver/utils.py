@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 
 
-def calculate_time_differenc(from_time, to_time):
+def calculate_time_difference(from_time, to_time):
     '''calculate the time diffrence between two given time inputs'''
     from_time = datetime.strptime(
         from_time.strip("'"), "%H:%M:%S")

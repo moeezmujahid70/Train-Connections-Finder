@@ -3,7 +3,7 @@ from solver.problem_solver import construct_connection, construct_connection_exp
 from solver.utils import add_seconds_to_time
 
 
-def solve_cost_funtion(graph, start, target, schedule_df, cost_attribute='stops', input_arrival_time='00:00:00'):
+def solve_cost_function(graph, start, target, schedule_df, cost_attribute='stops', input_arrival_time='00:00:00'):
     """
     Solves for the optimal path based on the specified cost attribute and formats the solution.
     """
