@@ -5,7 +5,7 @@ from solver.graph_builder import build_graph, expand_graph, adjust_start_times
 
 def main():
 
-    problems_file = "problems/example-problems.csv"
+    problems_file = "problems/problems.csv"
     mini_schedule_file = "data/mini-schedule.csv"
     schedule_file = "data/schedule.csv"         # File containing schedule data
 
@@ -57,7 +57,7 @@ def main():
             solutions['Connection'].append(connection)
             solutions['Cost'].append(cost)
 
-    create_solutions_csv(solutions, 'solutions/my-example-solutions1.csv')
+    create_solutions_csv(solutions, 'solutions/solutions.csv')
 
 
 if __name__ == "__main__":
