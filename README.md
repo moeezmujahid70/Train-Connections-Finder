@@ -43,7 +43,7 @@ pip install -r requirements.txt
 1.	Clone the Repository
 Clone this repository to your local machine:
 ```bash
-git clone https://github.com/yourusername/problem-solver.git
+git clone https://gitlab.rrze.fau.de/wrv/AISysProj/ws2425/a1.1-find-train-connections/team301.git
 ```
 
 2.	Run the Main Script
@@ -64,15 +64,15 @@ To solve other problems:
 
 ## Repository Structure
 
-ROOT/
+problem-solver/
 ├── data/
-│   ├── mini-schedule.csv        # mini schedule data
+│   ├── mini-schedule.csv        # Sample mini schedule data
 │   ├── schedule.csv             # Full schedule data
 │   ├── problems.csv             # Problem definitions
 ├── solutions/
-│   └── solutions.csv  # Output solutions
+│   └── my-example-solutions1.csv  # Output solutions
 ├── solver/
-│   ├── __init__.py              # Package initialization
+│   ├── init.py              # Package initialization
 │   ├── problem_solver.py        # Functions for loading and processing problems
 │   ├── costFuntions.py          # Cost function implementations
 │   ├── graph_builder.py         # Functions for building and expanding graphs
