@@ -63,8 +63,7 @@ To solve other problems:
 
 
 ## Repository Structure
-
-problem-solver/
+/
 ├── data/
 │   ├── mini-schedule.csv        # Sample mini schedule data
 │   ├── schedule.csv             # Full schedule data
