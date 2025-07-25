@@ -39,7 +39,7 @@ pip install -r requirements.txt
 1.	Clone the Repository
 Clone this repository to your local machine:
 ```bash
-git clone https://gitlab.rrze.fau.de/wrv/AISysProj/ws2425/a1.1-find-train-connections/team301.git
+git clone https://github.com/moeezmujahid70/Train-Connections-Finder.git
 ```
 
 2.	Run the Main Script
