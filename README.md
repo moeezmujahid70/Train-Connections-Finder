@@ -1,7 +1,3 @@
-# Repository for ws2425.1.1/team301
-
-**Topic:** WS24/25 Assignment 1.1: Find Train Connections
-
 # Find Train Connections
 
 ## Project Description
@@ -60,22 +56,3 @@ To solve other problems:
 	-	Add your problem definitions to problems/problems.csv.
 	-	Ensure corresponding schedule files (mini-schedule.csv or schedule.csv) are placed in the data/ folder.
 	-	Run main.py as described above.
-
-
-## Repository Structure
-/
-├── data/
-│   ├── mini-schedule.csv        # Sample mini schedule data
-│   ├── schedule.csv             # Full schedule data
-│   ├── problems.csv             # Problem definitions
-├── solutions/
-│   └── my-example-solutions1.csv  # Output solutions
-├── solver/
-│   ├── init.py              # Package initialization
-│   ├── problem_solver.py        # Functions for loading and processing problems
-│   ├── costFuntions.py          # Cost function implementations
-│   ├── graph_builder.py         # Functions for building and expanding graphs
-│   └── utils.py                 # Utility functions (e.g., time calculation)
-├── main.py                      # Main script to run the solver
-├── requirements.txt             # List of dependencies
-└── README.md                    # This file
